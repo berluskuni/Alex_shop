@@ -1,0 +1,52 @@
+<form action="" method="get" >
+<div class="panel panel-default filter">
+        <div class="panel-heading columnblock-title">Refine Search</div>
+        <div class="filter-block">
+          <div class="list-group"> <a class="list-group-item">Color</a>
+            <div class="list-group-item">
+              <div id="filter-group1">
+                <label class="checkbox">
+                  <input name="color" type="checkbox" value="black" {% if color == 'black' %} checked{% endif %} />
+                  Black </label>
+                <label class="checkbox">
+                  <input name="color" type="checkbox" value="silver" {% if color == 'silver' %} checked {% endif %} />
+                  Silver </label>
+                <label class="checkbox">
+                  <input name="color" type="checkbox" value="white" {% if color == 'white' %} checked {% endif %} />
+                  White </label>
+              </div>
+
+            </div>
+            <a class="list-group-item">Price</a>
+            <div class="list-group-item">
+              <div id="filter-group2">
+                <label class="checkbox">
+                  <input name="price" type="checkbox" value="lte" {% if price == 'lte' %} checked {% endif %}/>
+                  less $300 </label>
+                <label class="checkbox">
+                  <input name="price" type="checkbox" value="gte" {% if price == 'gte' %} checked {% endif %}/>
+                  more $300 </label>
+              </div>
+            </div>
+            <a class="list-group-item">Size</a>
+          {{ size }}
+            <div class="list-group-item">
+              <div id="filter-group3">
+                <label class="checkbox">
+                  <input name="size" type="checkbox" value="big" {% if size == 'big' %} checked {% endif %}/>
+                  Big </label>
+                <label class="checkbox">
+                  <input name="size" type="checkbox" value="medium" {% if size == 'medium' %} checked {% endif %}/>
+                  Medium </label>
+                <label class="checkbox">
+                  <input name="size" type="checkbox" value="small" {% if size == 'small' %} checked {% endif %}/>
+                  Small </label>
+              </div>
+            </div>
+          </div>
+          <div class="panel-footer text-right">
+            <button type="submit" id="button-filter" class="btn btn-primary">Refine Search</button>
+          </div>
+        </div>
+      </div>
+    </form>

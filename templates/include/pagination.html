@@ -1,0 +1,17 @@
+{% if is_paginated %}
+    <div class="category-page-wrapper">
+        <div class="result-inner">Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }}
+            ({{ page_obj.paginator.num_pages }} Pages)</div>
+        <div class="pagination-inner">
+          <ul class="pagination">
+            <li class="active"><span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span></li>
+             {% if page_obj.has_previous %}
+            <li><a href="{{ PORTAL_URL }}{{ request.path}}?page={{ page_obj.previous_page_number }}">&lt;</a></li>
+                 {% endif %}
+          {% if page_obj.has_next %}
+            <li><a href="{{ PORTAL_URL }}{{ request.path}}?page={{ page_obj.next_page_number }}">&gt;</a></li>
+              {% endif %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}

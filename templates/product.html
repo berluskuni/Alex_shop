@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% block content %}
+
+
+        <div class="container">
+  <ul class="breadcrumb">
+    <li><a href=""><i class="fa fa-home"></i></a></li>
+    <li><a href="">{{ subcategory.categories.name }}</a></li>
+  </ul>
+  <div class="row">
+  <div id="column-left" class="col-sm-3 hidden-xs column-left">
+      {% include 'include/product_category.html' %}
+      {% include 'include/product_filter.html' %}
+  </div>
+
+    <div id="content" class="col-sm-9">
+      <h2 class="category-title">{{ subcategory.name }}</h2>
+      <div class="row category-banner">
+        <div class="col-sm-12 category-image"><img src="{% static 'images/banners/category-banner.jpg' %}" alt="Desktops" title="Desktops" class="img-thumbnail" /></div>
+        <div class="col-sm-12 category-desc">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</div>
+      </div>
+      <div class="category-page-wrapper">
+        <div class="col-md-6 list-grid-wrapper">
+          <div class="btn-group btn-list-grid">
+            <button type="button" id="list-view" class="btn btn-default list" data-toggle="tooltip" title="List"><i class="fa fa-th-list"></i></button>
+            <button type="button" id="grid-view" class="btn btn-default grid" data-toggle="tooltip" title="Grid"><i class="fa fa-th"></i></button>
+          </div>
+          <a href="#" id="compare-total">Product Compare (0)</a> </div>
+        <div class="col-md-1 text-right page-wrapper">
+          <label class="control-label" for="input-limit">Show:</label>
+          <div class="limit">
+              <form id="show">
+                  <select id="input-limit" class="form-control" name="show" onchange="this.form.submit()">
+                  <option  value="4"{% if paginator.per_page == 4 %} selected="selected"{% endif %}>4</option>
+                  <option  value="8" {% if paginator.per_page == 8 %}selected="selected"{% endif %}>8</option>
+                  <option  value="25" {% if paginator.per_page == 25 %}selected="selected"{% endif %}>25</option>
+                  </select>
+              </form>
+
+
+          </div>
+        </div>
+        <div class="col-md-2 text-right sort-wrapper">
+          <label class="control-label" for="input-sort">Sort By:</label>
+          <div class="sort-inner">
+              <form id="sot-inner">
+            <select id="input-sort" class="form-control" name="sort" onchange="this.form.submit()">
+              <option value="name-asc" selected="selected" name="ordering">Default</option>
+              <option value="name-asc" {% if order == 'name-asc' %} selected="selected"{% endif %}>Name (A - Z)</option>
+              <option value="name-desc" {% if order == 'name-desc' %} selected="selected"{% endif %}>Name (Z - A)</option>
+              <option value="price-asc" {% if order == 'price-asc' %} selected="selected"{% endif %}>Price (Low &gt; High)</option>
+              <option value="price-desc" {% if order == 'price-desc' %} selected="selected"{% endif %}>Price (High &gt; Low)</option>
+            </select>
+              </form>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div class="grid-list-wrapper">
+        {% for product in products %}
+            <form action="{% url "cart:cart_add" product.id %}" method="post">
+            {% csrf_token %}
+        <div class="product-layout product-list col-xs-12">
+        <input type="hidden" name="product_id" value="{{ product.id }}" />
+          <div class="product-thumb">
+            <div class="image product-imageblock"> <a href="{{ product.get_absolute_url }}">{% thumbnail product.image "200x200" crop='center' as im %} <img src="{{ im.url }}"
+                                                                     alt="{{ product.name }}"
+                                                                     title="{{ product.name }}"
+                                                                     class="img-responsive" /> </a>{% endthumbnail %}
+            <div class="button-group">
+                <a href="{% url 'cart:wish_list_add' product.id %}"><button type="submit" class="wishlist" data-toggle="tooltip" title="Add to Wish List"><i class="fa fa-heart-o"></i></button></a>
+                <button type="submit" class="addtocart-btn">Add to Cart</button>
+                <button type="button" class="compare" data-toggle="tooltip" title="Compare this Product"><i class="fa fa-exchange"></i></button>
+            </div>
+
+            </div>
+            <div class="caption product-detail">
+              <h4 class="product-name"> <a href="{{ product.get_absolute_url }}" title="{{ product.name }}"> {{ product.name }} </a> </h4>
+              <p class="product-desc">{{ product.description |truncatewords:45 }}</p>
+              <p class="price product-price"><span class="price-old">${{ product.price }}</span> $122.00 <span class="price-tax">Ex Tax: $100.00</span> </p>
+              <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> </div>
+            </div>
+            <div class="button-group">
+              <a href="{% url 'cart:wish_list_add' product.id %}"><button type="button" class="wishlist" data-toggle="tooltip" title="Add to Wish List"><i class="fa fa-heart-o"></i></button></a>
+              <button type="submit" class="addtocart-btn">Add to Cart</button>
+              <button type="button" class="compare" data-toggle="tooltip" title="Compare this Product"><i class="fa fa-exchange"></i></button>
+            </div>
+          </div>
+        </div>
+            </form>
+        {% endfor %}
+      </div>
+      {% include 'include/pagination.html' %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

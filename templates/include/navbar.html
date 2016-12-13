@@ -1,0 +1,23 @@
+ <nav id="menu" class="navbar">
+    <div class="nav-inner container">
+        <div class="navbar-header"><span id="category" class="visible-xs">Categories</span>
+            <button type="button" class="btn btn-navbar navbar-toggle" ><i class="fa fa-bars"></i></button>
+        </div>
+        <div class="navbar-collapse">
+            <ul class="main-navigation">
+                <li><a href="{% url 'shop:home' %}"   class="parent"  >Home</a> </li>
+                <li><a href="#" class="active parent">Page</a>
+                    <ul>
+                        <li><a href="{% url 'cart:cart_detail' %}">Cart Page</a></li>
+                        <li><a href="{% url 'cart:cart_checkout' %}">Checkout Page</a></li>
+                        <li><a href="{% url 'account:register' %}">Register Page</a></li>
+                        <li><a href="#">Contact Page</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" >About us</a></li>
+                <li><a href="#" >Contact Us</a> </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>

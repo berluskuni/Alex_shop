@@ -1,0 +1,149 @@
+{% load staticfiles %}
+{% load thumbnail %}
+<header>
+    <div class="header-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="top-left pull-left">
+                        <div class="language">
+                            <form action="#" method="post" enctype="multipart/form-data" id="language">
+                                <div class="btn-group">
+                                    <button class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> <img src="/static/images/flags/gb.png" alt="English" title="English"> <i class="fa fa-caret-down"></i></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#"><img src="{% static 'images/flags/lb.png' %}" alt="Arabic" title="Arabic"> Arabic</a></li>
+                                        <li><a href="#"><img src="{% static 'images/flags/gb.png' %}" alt="English" title="English"> English</a></li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="currency">
+                            <form action="#" method="post" enctype="multipart/form-data" id="currency">
+                                <div class="btn-group">
+                                    <button class="btn btn-link dropdown-toggle" data-toggle="dropdown"> <strong>$</strong> <i class="fa fa-caret-down"></i> </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <button class="currency-select btn btn-link btn-block" type="button" name="EUR">€ Euro</button>
+                                        </li>
+                                        <li>
+                                            <button class="currency-select btn btn-link btn-block" type="button" name="GBP">£ Pound Sterling</button>
+                                        </li>
+                                        <li>
+                                            <button class="currency-select btn btn-link btn-block" type="button" name="USD">$ US Dollar</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="top-right pull-right">
+                        <div id="top-links" class="nav pull-right">
+                            <ul class="list-inline">
+                                {% if USER.is_authenticated %}
+                                <li class="dropdown"><a href="#" title="My Account" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-user"></i> <span>{{ USER.get_full_name }}</span> <span class="caret"></span></a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a href="{% url 'account:logout' %}">Logout</a></li>
+                                    </ul>
+                                </li>
+                                {% else %}
+                                <li class="dropdown"><a href="#" title="My Account" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-user"></i> <span>My Account</span> <span class="caret"></span></a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a href="{% url 'account:register' %}">Register</a></li>
+                                        <li><a href="{% url 'account:login' %}">Login</a></li>
+                                    </ul>
+                                </li>
+                                {% endif %}
+                                <li><a href="{% url 'cart:wish_list_detail' %}" id="wishlist-total" title="Wish List ({{ wish_list }})"><i class="fa fa-heart"></i> <span>Wish List</span><span> ({{ wish_list }})</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="header-inner">
+            <div class="col-sm-4 col-xs-6 header-left">
+            <div class="shipping">
+                        <div class="shipping-img"></div>
+                        <div class="shipping-text">Free Shipping <span class="shipping-detail">Free on all products</span></div>
+                    </div>
+
+            </div>
+            <div class="col-sm-4 col-xs-6 header-middle">
+                <div class="header-middle-top">
+
+                    <div id="logo"> <a href="#"><img src="/static/images/logo.png" title="E-Commerce" alt="E-Commerce" class="img-responsive" /></a> </div>
+                </div>
+            </div>
+            {% with total_items=cart|length %}
+            <div class="col-sm-4 col-xs-6 header-right">
+                <div id="cart" class="btn-group btn-block">
+                    <button type="button" class="btn btn-inverse btn-block btn-lg dropdown-toggle cart-dropdown-button"><span id="cart-total">{{ cart.get_total_price }}</span><i class="fa fa-caret-down"></i></button>
+                    <ul class="dropdown-menu pull-right cart-dropdown-menu">
+                        <li>
+                        {% for item in cart %}
+                        {% with product=item.product %}
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center"><a href="{{ product.get_absolute_url }}">{% thumbnail product.image "30x30" crop='center' as im %}<img class="img-thumbnail" title="{{ product.name }}" alt="{{ product.name }}" src="{{ im.url }}">{% endthumbnail %}</a></td>
+                                        <td class="text-left"><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></td>
+                                        <td class="text-right">x{{ item.quantity }}</td>
+                                        <td class="text-right">${{ item.total_price }}</td>
+                                        <td class="text-center"><button class="btn btn-danger btn-xs" title="Remove" type="button"><i class="fa fa-times"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        {% endwith %}
+                        {% endfor %}
+                        </li>
+                        <li>
+                            <div>
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-right"><strong>Sub-Total</strong></td>
+                                            <td class="text-right" id="sub-total">${{ cart.get_total_price }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right"><strong>VAT (20%)</strong></td>
+                                            <td class="text-right" id="vat"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right"><strong>Total</strong></td>
+                                            <td class="text-right" id="total"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p class="text-right"> <span class="btn-viewcart"><a href="/cart/"><strong><i class="fa fa-shopping-cart"></i> View Cart</strong></a></span> <span class="btn-checkout"><a href="{% url 'cart:cart_checkout' %}"><strong><i class="fa fa-share"></i> Checkout</strong></a></span> </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            {% endwith %}
+                <div id="search" class="input-group">
+                    <input type="text" name="search" value="" placeholder="Search" class="form-control input-lg" />
+                    <span class="input-group-btn">
+                    <button type="button" class="btn btn-default btn-lg"><i class="fa fa-search"></i></button>
+                    </span> </div>
+            </div>
+        </div>
+    </div>
+</header>
+<script type="text/javascript">
+    var header = function(){
+        $('#cart').click(function(){
+        var total = {{ cart.get_total_price }} + {{ cart.get_total_price }}*20/100;
+        var vat = {{ cart.get_total_price }}*20/100;
+            $('#vat').html('$'+vat+'.00');
+        $('#total').html('$'+total+'.00');
+    });
+ };
+$(document).ready(header);
+
+
+
+</script>

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% block content %}
+<div class="container" xmlns="http://www.w3.org/1999/html">
+  <ul class="breadcrumb">
+    <li><a href="{% url 'shop:home' %}"><i class="fa fa-home"></i></a></li>
+    <li><a href="#">Confirm order</a></li>
+  </ul>
+  <div class="row">
+  <div id="column-left" class="col-sm-3 hidden-xs column-left">
+      {% include 'include/product_category.html' %}
+  </div>
+      <div class="col-sm-9" id="content">
+          {% if errors %}
+          <h2>{{ errors }}</h2>
+          {% endif %}
+      {% if context %}
+      <h1>Thank you for your order!</h1>
+             <h2>{{ context }}</h2>
+
+      <div class="buttons">
+        <div class="pull-left"><a class="btn btn-default" href="{% url 'shop:home' %}">Continue Shopping</a></div>
+        <div class="pull-right"><a class="btn btn-primary" href="#">Paying</a></div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
